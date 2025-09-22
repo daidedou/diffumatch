@@ -26,7 +26,7 @@ import yaml
 from utils.surfaces import Surface
 import notebook_helpers as helper
 from utils.meshplot import visu_pts
-from utils.torch_fmap import extract_p2p_torch_fmap
+from utils.torch_fmap import extract_p2p_torch_fmap, torch_zoomout
 import torch
 import argparse
 # -----------------------------
@@ -202,6 +202,10 @@ def run_clicked(mesh1_path, mesh2_path, yaml_path, lambda_val, zoomout_val, time
     target_normals = torch.from_numpy(datadicts.target_surf.surfel/np.linalg.norm(datadicts.target_surf.surfel, axis=-1, keepdims=True)).float().to("cuda")
 
     C12_new, p2p, p2p_init, _, loss_save = matcher.optimize(datadicts.shape_dict, datadicts.target_dict, target_normals)
+    evecs1, evecs2 = datadicts.shape_dict["evecs"], datadicts.target_dict["evecs"]
+    evecs_2trans = evecs2.t() @ torch.diag(datadicts.target_dict["mass"])
+    C12_end_zo = torch_zoomout(evecs1, evecs2, evecs_2trans, C12_new.squeeze()[:15, :15], 150)# matcher.cfg.sds_conf.zoomout)
+    p2p_zo, _ = extract_p2p_torch_fmap(C12_end_zo, datadicts.shape_dict["evecs"], datadicts.target_dict["evecs"])
     return build_outputs(datadicts.shape_surf, datadicts.target_surf, datadicts.cmap1, p2p, tag="run")
 
 
@@ -260,8 +264,9 @@ with gr.Blocks(title="DiffuMatch demo") as demo:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Launch the gradio demo")
     parser.add_argument('--config', type=str, default="config/matching/sds.yaml", help='Config file location')
+    parser.add_argument('--share', action="store_true")
     args = parser.parse_args()
     cfg = OmegaConf.load(args.config)
     matcher = zero_shot.Matcher(cfg)
     datadicts = None
-    demo.launch()
+    demo.launch(share=args.share)
