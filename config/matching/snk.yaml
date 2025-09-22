@@ -1,0 +1,27 @@
+gpu: 0
+cache: "cache/fmaps"
+
+snk: True
+refine: True
+optimize: True
+
+deepfeat_conf:
+  fmap: 
+    feat: "xyz"
+    n_fmap: 30
+    C_in: 3
+    n_feat: 128 ## Doesn't change
+    lambda_: 100
+    use_resolvent: True ## Don't forget to change lambda values if you want to use the resolvent mask (around 100)
+    resolvent_gamma: 0.5
+
+opt:
+  n_loop: 1000
+  soft_p2p: True
+
+loss:
+  bij: 1.
+  ortho: 1.
+  cycle: 1
+  mse_rec: 1
+  prism_rec: 1

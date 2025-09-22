@@ -1,0 +1,35 @@
+gpu: 0
+cache: "cache/fmaps"
+
+sds: True
+refine: True
+optimize: True
+rotate: True
+
+sds_conf:
+  train_dir: fmap_exps
+  diff_num_exp: 53
+  zoomout: 40
+
+deepfeat_conf:
+  fmap: 
+    feat: "xyz"
+    n_fmap: 30
+    C_in: 3
+    n_feat: 128 ## Doesn't change
+    lambda_: 1e-3
+    use_diff: True
+    diffusion:
+      abs: True
+      normalize: False
+      time: 1
+      batch_sds: 32
+      batch_mask: 200
+
+opt:
+  n_loop: 1000
+  soft_p2p: False
+
+loss:
+  sds: 0.1
+  proper: 1.

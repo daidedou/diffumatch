@@ -1,0 +1,23 @@
+gpu: 0
+cache: "cache/fmaps"
+
+sds: True
+optimize: False
+
+sds_conf:
+  train_dir: pretrained
+  diff_num_exp: 53
+  zoomout: 40
+
+deepfeat_conf:
+  fmap: 
+    feat: "xyz"
+    n_fmap: 30
+    C_in: 3
+    n_feat: 128 ## Doesn't change
+    lambda_: 100
+    use_resolvent: True ## Don't forget to change lambda values if you want to use the resolvent mask (around 100)
+    resolvent_gamma: 0.5
+
+
+zo_shot: 150
