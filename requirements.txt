@@ -6,7 +6,7 @@ cycler==0.12.1
 fonttools==4.47.2
 freetype-py==2.4.0
 imageio==2.33.1
-ipygany
+ipygany==0.5.0
 jupyter
 kiwisolver==1.4.5
 lxml==5.1.0
@@ -25,7 +25,7 @@ trimesh==4.0.10
 vtk==9.3.0
 timm
 potpourri3d 
-pythreejs
+pythreejs==2.4.2
 lapy
 roma
 webdataset
