@@ -2,24 +2,13 @@ import torch
 import numpy as np
 import scipy
 import os
-import os.path as osp
 import sys
-import math
 import random
 import numpy as np
 import torch
-import wandb
 import time
-import glob
-import shutil
 from datetime import datetime
-import yaml
 import importlib
-from torch.utils.data import DataLoader, ConcatDataset
-from scipy.io import savemat
-from tqdm.auto import tqdm
-from pathlib import Path
-import pickle
 import json
 import argparse
 from omegaconf import OmegaConf
@@ -36,9 +25,15 @@ from utils.mesh import save_ply, load_mesh
 from shape_data import get_data_dirs
 from utils.pickle_stuff import safe_load_with_fallback
 from utils.geometry import compute_operators, load_operators
-from utils.surfaces import Surface, centroid
+from utils.surfaces import Surface
 import sys
-from huggingface_hub import hf_hub_download
+try:
+    import google.colab
+    print("Running Colab")
+    from tqdm import tqdm
+except ImportError:
+    print("Running local")
+    from tqdm.auto import tqdm
 
 
 def seed_everything(seed=42):
