@@ -6,6 +6,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-2507.23715-b31b1b.svg)](https://arxiv.org/pdf/2507.23715)
 [![Website](https://img.shields.io/badge/Website-Live-brightgreen)](https://daidedou.github.io/publication/nonrigiddiff)
+[![Colab demo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1GQucg465Tos67ZyJuI67R5P-fYcn6OSN?usp=sharing)
 
 <font size="3">
 <a href="https://daidedou.github.io" style="font-size:100%;">Emery Pierson<sup>1</sup></a>&emsp;
@@ -48,7 +49,13 @@ Then install the necessary packages
 pip install -r requirements.txt
 ```
 
-Note: To be fast enough, our Zoomout implementation relies on [Pykeops](https://www.kernel-operations.io/keops/python/installation.html). Installation might fail from time to time (although it is much better since they switched to nvrtc). If you have problems with Pykeops, their github [issues](https://github.com/getkeops/keops/issues) often have a solution for you!
+Note: In inference phase (training not affected), to be fast enough, our Zoomout implementation relies on [Pykeops](https://www.kernel-operations.io/keops/python/installation.html). Installation might fail from time to time (although it is much better since they switched to nvrtc). If you have problems with Pykeops, their github [issues](https://github.com/getkeops/keops/issues) often have a solution for you! One of the common errors is `ld cannot find -lnvrtc`. The [solution](https://github.com/getkeops/keops/issues/318) is to add cuda to library path:
+
+```bash
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/cuda/lib
+```
+
+Befor launching any script/notebook.
 
 ---
 
@@ -73,7 +80,7 @@ The whole training relies of the [EDM repository](https://github.com/NVlabs/edm)
 
 ### Matching two shapes
 
-If you want to try the model, I suggest you to run the [notebook](diffumatch_demo.ipynb), or alternatively the gradio demo script (may not be bug free). 
+If you want to try the model, I suggest you to run the [notebook](diffumatch_demo.ipynb), or alternatively the gradio demo script (may not be bug free). There is also a [colab demo](https://colab.research.google.com/drive/1GQucg465Tos67ZyJuI67R5P-fYcn6OSN?usp=sharing) if you are brave enough to install the packages and debug (it is quite common that demos break after a single colab update).
 ```bash
 python gradio_demo.py --config config/matching/sds.yaml
 ```
