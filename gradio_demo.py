@@ -206,7 +206,7 @@ def run_clicked(mesh1_path, mesh2_path, yaml_path, lambda_val, zoomout_val, time
     evecs_2trans = evecs2.t() @ torch.diag(datadicts.target_dict["mass"])
     C12_end_zo = torch_zoomout(evecs1, evecs2, evecs_2trans, C12_new.squeeze()[:15, :15], 150)# matcher.cfg.sds_conf.zoomout)
     p2p_zo, _ = extract_p2p_torch_fmap(C12_end_zo, datadicts.shape_dict["evecs"], datadicts.target_dict["evecs"])
-    return build_outputs(datadicts.shape_surf, datadicts.target_surf, datadicts.cmap1, p2p, tag="run")
+    return build_outputs(datadicts.shape_surf, datadicts.target_surf, datadicts.cmap1, p2p_zo, tag="run")
 
 
 with gr.Blocks(title="DiffuMatch demo") as demo:
