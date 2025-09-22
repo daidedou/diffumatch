@@ -381,7 +381,8 @@ class Matcher(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Launch the SDS demo over datasets")
     parser.add_argument('--dataset', type=str, default="SCAPE", help='name of the dataset')
-    parser.add_argument('--config', type=str, default="config/matching/sds.yaml", help='Config file location')    parser.add_argument('--datadir', type=str, default="data", help='path where datasets are store')
+    parser.add_argument('--config', type=str, default="config/matching/sds.yaml", help='Config file location')    
+    parser.add_argument('--datadir', type=str, default="data", help='path where datasets are store')
     parser.add_argument('--output', type=str, default="results", help="where to store experience results")
     args = parser.parse_args()
 
