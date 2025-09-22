@@ -96,7 +96,7 @@ We also provide a (non-official) reproduction of [Shape Non-rigid Kinematics (SN
 
 ### Paper experiments
 
-Read experiments.md
+Read [experiments.md](experiments.md)
 
 ## 📜 License  
 This project is licensed under the [Apache Licence](LICENSE).  
