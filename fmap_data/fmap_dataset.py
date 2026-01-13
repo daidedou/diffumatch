@@ -62,11 +62,11 @@ class FmapLiveTemplateDataset(torch.utils.data.Dataset):
             self.files = contains_any_regex(TEST_IDX, file_list)
         n_fmaps = 2*len(self.files)
         self.real_data_len = n_fmaps
-        cache_template = np.load(os.path.join(cache_path, "template_clean.npz"))
+        cache_template = np.load(os.path.join(cache_path, "template.npz"))
         self.evecs_template = cache_template['evecs']
         self.evals_template = cache_template['evals']
         self.mass_template = cache_template['mass']
-        self.n_v = cache_template["vertices"].shape[0]
+        self.n_v = cache_template["verts"].shape[0]
         self.inD = np.arange(self.n_v)
         self.abs = absolute
     

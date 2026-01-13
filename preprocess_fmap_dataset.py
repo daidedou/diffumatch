@@ -1,6 +1,6 @@
 
 from utils.surfaces import Surface, centroid
-from utils.geometry import get_operators_small 
+from utils.geometry import get_operators_small, get_operators
 from utils.mesh import find_mesh_files
 from fmap_data.dfaust_stuff import get_cache_dfaust
 import h5py
@@ -8,6 +8,7 @@ from tqdm import tqdm
 import os 
 import itertools
 import argparse
+import shutil 
 
 
 ## DFAUST utils
@@ -63,6 +64,19 @@ if __name__ == "__main__":
                                 _ = get_operators_small(verts[i], faces, k_eig=args.n_eig, cache_path=cache_i)
                         else:
                             print(f"Sequence : {sidseq} does not exist in {fil} (not an error)!")
+            template_path = "assets/template.ply"
+            if os.path.exists("assets/template.ply"):
+                print("DFAUST template found!! Last preprocess")
+                surf = Surface(filename=template_path)
+                center, sqarea = centroid(surf)
+                surf.updateVertices((surf.vertices - center)/sqarea)
+                _ = get_operators(surf.vertices, surf.faces, k_eig=200, cache_path=os.path.join(args.cache_path, "template.npz"))
+            else:
+                ## Take the most similar shape to the template.
+                print("DFAUST template not found!! Using 50009_chicken_wings_00000 as template.")
+                with h5py.File(os.path.join(args.path, "registrations_m.hdf5"), 'r') as f_read:
+                    verts, _ = open_sequence(50009, 'chicken_wings', f_read)
+                _ = get_operators(verts[0], faces, k_eig=200, cache_path=os.path.join(args.cache_path, "template.npz"))
     else:
         mesh_files = find_mesh_files(args.path)
         mesh_files.sort()
@@ -70,9 +84,17 @@ if __name__ == "__main__":
         faces = surf.faces
         output_dir = args.cache_path
         os.makedirs(output_dir, exist_ok=True)
+        template_path = None
         for file_name in tqdm(mesh_files):
-            path = os.path.join(output_dir, os.path.splitext(file_name)[0] +  ".npz")
+            cache_path = os.path.join(output_dir, os.path.splitext(file_name)[0] +  ".npz")
             surf = Surface(filename=os.path.join(args.path, file_name))
             center, sqarea = centroid(surf)
             surf.updateVertices((surf.vertices - center)/sqarea)
-            _ = get_operators_small(surf.vertices, surf.faces, k_eig=args.n_eig)
+            _ = get_operators_small(surf.vertices, surf.faces, k_eig=args.n_eig, cache_path=cache_path)
+            if template_path is None:
+                template_path = os.path.join(args.path, file_name)
+        print("Making template (using first file of the mesh collection).")
+        surf = Surface(filename=template_path)
+        center, sqarea = centroid(surf)
+        surf.updateVertices((surf.vertices - center)/sqarea)
+        _ = get_operators(surf.vertices, surf.faces, k_eig=200, cache_path=os.path.join(args.cache_path, "template.npz"))
